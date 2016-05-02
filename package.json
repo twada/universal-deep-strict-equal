@@ -17,7 +17,10 @@
     "zuul": "^3.10.1"
   },
   "files": [
-    "index.js"
+    "README.md",
+    "CHANGELOG.md",
+    "index.js",
+    "package.json"
   ],
   "homepage": "https://github.com/twada/universal-deep-strict-equal",
   "keywords": [
