@@ -58,6 +58,18 @@ function isRegExp(re) {
 function isArguments (object) {
   return isObject(object) && pToString(object) == '[object Arguments]';
 }
+var isBufferConstructorAcceptsArrayBuffer = Uint8Array && (new Buffer(new Uint8Array([1]).buffer)[0] === 1);
+function toBuffer(ab) {
+  if (isBufferConstructorAcceptsArrayBuffer) {
+    return new Buffer(ab);
+  }
+  var buffer = new Buffer(ab.byteLength);
+  var view = new Uint8Array(ab);
+  for (var i = 0; i < buffer.length; ++i) {
+    buffer[i] = view[i];
+  }
+  return buffer;
+}
 function fromBufferSupport() {
   try {
     return typeof Buffer.from === 'function' && !!Buffer.from([0x62,0x75,0x66,0x66,0x65,0x72]);
@@ -65,9 +77,7 @@ function fromBufferSupport() {
     return false;
   }
 }
-var bufferFrom = fromBufferSupport() ? Buffer.from : function bufferFrom (array) {
-    return new Buffer(array);
-};
+var bufferFrom = fromBufferSupport() ? Buffer.from : toBuffer;
 
 function _deepEqual(actual, expected, strict) {
   // 7.1. All identical values are equivalent, as determined by ===.
