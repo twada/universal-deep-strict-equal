@@ -26,7 +26,6 @@
 
 var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
-var objectKeys = Object.keys || require('object-keys');
 var pSlice = Array.prototype.slice;
 var getPrototypeOf = Object.getPrototypeOf || function (obj) {
   return obj.__proto__ || (
@@ -34,6 +33,9 @@ var getPrototypeOf = Object.getPrototypeOf || function (obj) {
       ? obj.constructor.prototype
       : Object.prototype
   );
+};
+var isEnumerable = function (obj, key) {
+  return Object.prototype.propertyIsEnumerable.call(obj, key);
 };
 function pToString (obj) {
   return Object.prototype.toString.call(obj);
@@ -78,6 +80,24 @@ function fromBufferSupport() {
   }
 }
 var bufferFrom = fromBufferSupport() ? Buffer.from : toBuffer;
+
+var objectKeys = (function () {
+    var NODE_V10_ARRAY_BUFFER_ENUM = ['BYTES_PER_ELEMENT','get','set','slice','subarray','buffer','length','byteOffset','byteLength'];
+    var keys = Object.keys || require('object-keys');
+    return function objectKeys (obj) {
+        if (isEnumerable(obj, 'BYTES_PER_ELEMENT') &&
+            isEnumerable(obj, 'subarray') &&
+            isEnumerable(obj, 'buffer') &&
+            isEnumerable(obj, 'byteOffset') &&
+            isEnumerable(obj, 'byteLength')) {
+            return keys(obj).filter(function (k) {
+                return NODE_V10_ARRAY_BUFFER_ENUM.indexOf(k) === -1;
+            });
+        } else {
+            return keys(obj);
+        }
+    };
+})();
 
 function _deepEqual(actual, expected, strict) {
   // 7.1. All identical values are equivalent, as determined by ===.
