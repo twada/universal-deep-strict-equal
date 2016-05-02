@@ -58,6 +58,16 @@ function isRegExp(re) {
 function isArguments (object) {
   return isObject(object) && pToString(object) == '[object Arguments]';
 }
+function fromBufferSupport() {
+  try {
+    return typeof Buffer.from === 'function' && !!Buffer.from([0x62,0x75,0x66,0x66,0x65,0x72]);
+  } catch (e) {
+    return false;
+  }
+}
+var bufferFrom = fromBufferSupport() ? Buffer.from : function bufferFrom (array) {
+    return new Buffer(array);
+};
 
 function _deepEqual(actual, expected, strict) {
   // 7.1. All identical values are equivalent, as determined by ===.
@@ -98,8 +108,8 @@ function _deepEqual(actual, expected, strict) {
              pToString(actual) === pToString(expected) &&
              !(actual instanceof Float32Array ||
                actual instanceof Float64Array)) {
-    return compare(Buffer.from(actual.buffer),
-                   Buffer.from(expected.buffer)) === 0;
+    return compare(bufferFrom(actual.buffer),
+                   bufferFrom(expected.buffer)) === 0;
 
   // 7.5 For all other Object pairs, including Array objects, equivalence is
   // determined by having the same number of owned properties (as verified
