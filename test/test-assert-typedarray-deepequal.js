@@ -1,7 +1,6 @@
 // port of https://github.com/nodejs/node/blob/v6.0.0/test/parallel/test-assert-typedarray-deepequal.js
 'use strict';
 
-delete require.cache[require.resolve('..')];
 var _deepEqual = require('..');
 var assert = require('assert');
 
@@ -48,13 +47,18 @@ var notEqualArrayPairs = [
   [new Float64Array([0.1]), new Float64Array([0.0])]
 ];
 
-equalArrayPairs.forEach(function (arrayPair) {
-  deepEqual(arrayPair[0], arrayPair[1]);
-});
-
-notEqualArrayPairs.forEach(function (arrayPair) {
-  assert.throws(
-    makeBlock(deepEqual, arrayPair[0], arrayPair[1]),
-    assert.AssertionError
-  );
+describe('TypedArray deepEqual', function () {
+  equalArrayPairs.forEach(function (arrayPair, idx) {
+    it('equalArrayPairs - ' + idx, function () {
+      deepEqual(arrayPair[0], arrayPair[1]);
+    });
+  });
+  notEqualArrayPairs.forEach(function (arrayPair, idx) {
+    it('notEqualArrayPairs - ' + idx, function () {
+      assert.throws(
+        makeBlock(deepEqual, arrayPair[0], arrayPair[1]),
+        assert.AssertionError
+      );
+    });
+  });
 });

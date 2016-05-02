@@ -1,7 +1,6 @@
 // port of https://github.com/nodejs/node/blob/v6.0.0/test/parallel/test-assert.js#L62-L163
 'use strict';
 
-delete require.cache[require.resolve('..')];
 var _deepEqual = require('..');
 var assert = require('assert');
 
@@ -18,8 +17,9 @@ function makeBlock(f) {
   };
 }
 
-// deepEquals joy!
-// 7.2
+describe('deepEqual', function () {
+
+it('7.2', function () {
 assert.doesNotThrow(makeBlock(deepEqual, new Date(2000, 3, 14),
                     new Date(2000, 3, 14)),
                     'deepEqual(new Date(2000, 3, 14), new Date(2000, 3, 14))');
@@ -27,8 +27,10 @@ assert.doesNotThrow(makeBlock(deepEqual, new Date(2000, 3, 14),
 assert.throws(makeBlock(deepEqual, new Date(), new Date(2000, 3, 14)),
               assert.AssertionError,
               'deepEqual(new Date(), new Date(2000, 3, 14))');
+});
 
-// 7.3
+
+it('7.3', function () {
 assert.doesNotThrow(makeBlock(deepEqual, /a/, /a/));
 assert.doesNotThrow(makeBlock(deepEqual, /a/g, /a/g));
 assert.doesNotThrow(makeBlock(deepEqual, /a/i, /a/i));
@@ -43,16 +45,19 @@ assert.throws(makeBlock(deepEqual, /a/igm, /a/im));
 var re1 = /a/;
 re1.lastIndex = 3;
 assert.throws(makeBlock(deepEqual, re1, /a/));
+});
 
 
-// 7.4
+it('7.4', function () {
 assert.doesNotThrow(makeBlock(deepEqual, 4, '4'), 'deepEqual(4, \'4\')');
 assert.doesNotThrow(makeBlock(deepEqual, true, 1), 'deepEqual(true, 1)');
 assert.throws(makeBlock(deepEqual, 4, '5'),
               assert.AssertionError,
               'deepEqual( 4, \'5\')');
+});
 
-// 7.5
+
+it('7.5', function () {
 // having the same number of owned properties && the same set of keys
 assert.doesNotThrow(makeBlock(deepEqual, {a: 4}, {a: 4}));
 assert.doesNotThrow(makeBlock(deepEqual, {a: 4, b: '2'}, {a: 4, b: '2'}));
@@ -71,8 +76,9 @@ a2.a = 'test';
 assert.throws(makeBlock(deepEqual, Object.keys(a1), Object.keys(a2)),
               assert.AssertionError);
 assert.doesNotThrow(makeBlock(deepEqual, a1, a2));
+});
 
-// having an identical prototype property
+it('having an identical prototype property', function () {
 var nbRoot = {
   toString: function() { return this.first + ' ' + this.last; }
 };
@@ -99,8 +105,9 @@ assert.doesNotThrow(makeBlock(deepEqual, nb1, nb2));
 nameBuilder2.prototype = Object;
 nb2 = new nameBuilder2('Ryan', 'Dahl');
 assert.doesNotThrow(makeBlock(deepEqual, nb1, nb2));
+});
 
-// primitives and object
+it('primitives and object', function () {
 assert.throws(makeBlock(deepEqual, null, {}), assert.AssertionError);
 assert.throws(makeBlock(deepEqual, undefined, {}), assert.AssertionError);
 assert.throws(makeBlock(deepEqual, 'a', ['a']), assert.AssertionError);
@@ -110,8 +117,9 @@ assert.throws(makeBlock(deepEqual, true, {}), assert.AssertionError);
 if (typeof Symbol !== 'undefined') {
   assert.throws(makeBlock(deepEqual, Symbol(), {}), assert.AssertionError);
 }
+});
 
-// primitive wrappers and object
+it('primitive wrappers and object', function () {
 assert.doesNotThrow(makeBlock(deepEqual, new String('a'), ['a']),
                     assert.AssertionError);
 assert.doesNotThrow(makeBlock(deepEqual, new String('a'), {0: 'a'}),
@@ -120,3 +128,6 @@ assert.doesNotThrow(makeBlock(deepEqual, new Number(1), {}),
                     assert.AssertionError);
 assert.doesNotThrow(makeBlock(deepEqual, new Boolean(true), {}),
                     assert.AssertionError);
+});
+
+});

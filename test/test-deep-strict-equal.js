@@ -1,7 +1,6 @@
 // port of https://github.com/nodejs/node/blob/v6.0.0/test/parallel/test-assert.js#L165-L280
 'use strict';
 
-delete require.cache[require.resolve('..')];
 var _deepEqual = require('..');
 var assert = require('assert');
 
@@ -11,13 +10,6 @@ function deepStrictEqual(actual, expected, message) {
     }
 };
 
-var a1 = [1, 2, 3];
-var a2 = [1, 2, 3];
-a1.a = 'test';
-a1.b = true;
-a2.b = true;
-a2.a = 'test';
-
 function makeBlock(f) {
   var args = Array.prototype.slice.call(arguments, 1);
   return function() {
@@ -25,7 +17,9 @@ function makeBlock(f) {
   };
 }
 
-//deepStrictEqual
+describe('deepStrictEqual', function () {
+
+it('7.2', function () {
 assert.doesNotThrow(makeBlock(deepStrictEqual, new Date(2000, 3, 14),
                     new Date(2000, 3, 14)),
                     'deepStrictEqual(new Date(2000, 3, 14),\
@@ -34,8 +28,10 @@ assert.doesNotThrow(makeBlock(deepStrictEqual, new Date(2000, 3, 14),
 assert.throws(makeBlock(deepStrictEqual, new Date(), new Date(2000, 3, 14)),
               assert.AssertionError,
               'deepStrictEqual(new Date(), new Date(2000, 3, 14))');
+});
 
-// 7.3 - strict
+
+it('7.3 - strict', function () {
 assert.doesNotThrow(makeBlock(deepStrictEqual, /a/, /a/));
 assert.doesNotThrow(makeBlock(deepStrictEqual, /a/g, /a/g));
 assert.doesNotThrow(makeBlock(deepStrictEqual, /a/i, /a/i));
@@ -51,7 +47,10 @@ var re1 = /a/;
 re1.lastIndex = 3;
 assert.throws(makeBlock(deepStrictEqual, re1, /a/));
 
-// 7.4 - strict
+});
+
+
+it('7.4 - strict', function () {
 assert.throws(makeBlock(deepStrictEqual, 4, '4'),
               assert.AssertionError,
               'deepStrictEqual(4, \'4\')');
@@ -63,8 +62,10 @@ assert.throws(makeBlock(deepStrictEqual, true, 1),
 assert.throws(makeBlock(deepStrictEqual, 4, '5'),
               assert.AssertionError,
               'deepStrictEqual(4, \'5\')');
+});
 
-// 7.5 - strict
+
+it('7.5 - strict', function () {
 // having the same number of owned properties && the same set of keys
 assert.doesNotThrow(makeBlock(deepStrictEqual, {a: 4}, {a: 4}));
 assert.doesNotThrow(makeBlock(deepStrictEqual,
@@ -84,9 +85,18 @@ assert.throws(makeBlock(deepStrictEqual,
                         [0, 1, 2, 'b', 'a']),
               assert.AssertionError);
 
-assert.doesNotThrow(makeBlock(deepStrictEqual, a1, a2));
+var a1 = [1, 2, 3];
+var a2 = [1, 2, 3];
+a1.a = 'test';
+a1.b = true;
+a2.b = true;
+a2.a = 'test';
 
-// Prototype check
+assert.doesNotThrow(makeBlock(deepStrictEqual, a1, a2));
+});
+
+
+it('Prototype check', function () {
 function Constructor1(first, last) {
   this.first = first;
   this.last = last;
@@ -106,8 +116,10 @@ Constructor2.prototype = Constructor1.prototype;
 obj2 = new Constructor2('Ryan', 'Dahl');
 
 assert.doesNotThrow(makeBlock(deepStrictEqual, obj1, obj2));
+});
 
-// primitives
+
+it('primitives', function () {
 assert.throws(makeBlock(deepStrictEqual, 4, '4'),
               assert.AssertionError);
 assert.throws(makeBlock(deepStrictEqual, true, 1),
@@ -118,9 +130,10 @@ if (typeof Symbol !== 'undefined') {
   var s = Symbol();
   assert.doesNotThrow(makeBlock(deepStrictEqual, s, s));
 }
+});
 
 
-// primitives and object
+it('primitives and object', function () {
 assert.throws(makeBlock(deepStrictEqual, null, {}), assert.AssertionError);
 assert.throws(makeBlock(deepStrictEqual, undefined, {}), assert.AssertionError);
 assert.throws(makeBlock(deepStrictEqual, 'a', ['a']), assert.AssertionError);
@@ -131,8 +144,10 @@ if (typeof Symbol !== 'undefined') {
   assert.throws(makeBlock(deepStrictEqual, Symbol(), {}),
                 assert.AssertionError);
 }
+});
 
-// primitive wrappers and object
+
+it('primitive wrappers and object', function () {
 assert.throws(makeBlock(deepStrictEqual, new String('a'), ['a']),
               assert.AssertionError);
 assert.throws(makeBlock(deepStrictEqual, new String('a'), {0: 'a'}),
@@ -141,3 +156,6 @@ assert.throws(makeBlock(deepStrictEqual, new Number(1), {}),
               assert.AssertionError);
 assert.throws(makeBlock(deepStrictEqual, new Boolean(true), {}),
               assert.AssertionError);
+});
+
+});
