@@ -47,6 +47,7 @@
   },
   "scripts": {
     "test": "mocha test/test-*.js",
+    "test-saucelabs": "zuul -- test/test-*.js",
     "zuul-local": "zuul --local 8080 --ui mocha-bdd -- test/test-*.js"
   }
 }
