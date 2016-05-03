@@ -7,6 +7,7 @@ A port of [Node v6's internal _deepEqual function](https://github.com/nodejs/nod
 [![NPM version][npm-image]][npm-url]
 [![License][license-image]][license-url]
 
+[![Sauce Test Status][saucelabs-image]][saucelabs-url]
 
 *Issues and improvements should be done in [Node.js](https://github.com/nodejs/node/issues) first.*
 
@@ -37,3 +38,6 @@ Licensed under the [MIT](http://twada.mit-license.org/) license.
 
 [license-url]: http://twada.mit-license.org/
 [license-image]: https://img.shields.io/badge/license-MIT-brightgreen.svg
+
+[saucelabs-url]: https://saucelabs.com/u/udse
+[saucelabs-image]: https://saucelabs.com/browser-matrix/udse.svg
