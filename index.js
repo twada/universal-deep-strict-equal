@@ -60,11 +60,14 @@ function isRegExp(re) {
 function isArguments(object) {
   return isObject(object) && pToString(object) == '[object Arguments]';
 }
+// check whether Buffer constructor accepts ArrayBuffer or not
 var isBufferConstructorAcceptsArrayBuffer = Uint8Array && (new Buffer(new Uint8Array([1]).buffer)[0] === 1);
 function toBuffer(ab) {
   if (isBufferConstructorAcceptsArrayBuffer) {
+    // Node 4.x
     return new Buffer(ab);
   }
+  // Node 0.10.x and 0.12.x
   var buffer = new Buffer(ab.byteLength);
   var view = new Uint8Array(ab);
   for (var i = 0; i < buffer.length; ++i) {
@@ -76,15 +79,16 @@ function fromBufferSupport() {
   try {
     return typeof Buffer.from === 'function' && !!Buffer.from([0x62,0x75,0x66,0x66,0x65,0x72]);
   } catch (e) {
+    // Buffer.from under Node 4.x causes `TypeError: this is not a typed array.`
     return false;
   }
 }
 var bufferFrom = fromBufferSupport() ? Buffer.from : toBuffer;
-
 var objectKeys = (function () {
   var NODE_V10_ARRAY_BUFFER_ENUM = ['BYTES_PER_ELEMENT','get','set','slice','subarray','buffer','length','byteOffset','byteLength'];
   var keys = Object.keys || require('object-keys');
   return function objectKeys(obj) {
+    // avoid iterating enumerable properties of ArrayBuffer under Node 0.10.x
     if (isEnumerable(obj, 'BYTES_PER_ELEMENT') &&
         isEnumerable(obj, 'subarray') &&
         isEnumerable(obj, 'buffer') &&
