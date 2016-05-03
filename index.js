@@ -27,17 +27,17 @@
 var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
 var pSlice = Array.prototype.slice;
-var getPrototypeOf = Object.getPrototypeOf || function (obj) {
+var getPrototypeOf = Object.getPrototypeOf || function(obj) {
   return obj.__proto__ || (
     obj.constructor
       ? obj.constructor.prototype
       : Object.prototype
   );
 };
-var isEnumerable = function (obj, key) {
+function isEnumerable(obj, key) {
   return Object.prototype.propertyIsEnumerable.call(obj, key);
 };
-function pToString (obj) {
+function pToString(obj) {
   return Object.prototype.toString.call(obj);
 };
 function isPrimitive(arg) {
@@ -57,7 +57,7 @@ function isDate(d) {
 function isRegExp(re) {
   return isObject(re) && pToString(re) === '[object RegExp]';
 }
-function isArguments (object) {
+function isArguments(object) {
   return isObject(object) && pToString(object) == '[object Arguments]';
 }
 var isBufferConstructorAcceptsArrayBuffer = Uint8Array && (new Buffer(new Uint8Array([1]).buffer)[0] === 1);
@@ -84,7 +84,7 @@ var bufferFrom = fromBufferSupport() ? Buffer.from : toBuffer;
 var objectKeys = (function () {
   var NODE_V10_ARRAY_BUFFER_ENUM = ['BYTES_PER_ELEMENT','get','set','slice','subarray','buffer','length','byteOffset','byteLength'];
   var keys = Object.keys || require('object-keys');
-  return function objectKeys (obj) {
+  return function objectKeys(obj) {
     if (isEnumerable(obj, 'BYTES_PER_ELEMENT') &&
         isEnumerable(obj, 'subarray') &&
         isEnumerable(obj, 'buffer') &&
