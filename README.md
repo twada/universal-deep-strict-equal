@@ -12,11 +12,23 @@ A port of [Node v6's internal _deepEqual function](https://github.com/nodejs/nod
 *Issues and improvements should be done in [Node.js](https://github.com/nodejs/node/issues) first.*
 
 
+USAGE
+---------------------------------------
+
+```javascript
+var deepEqual = require('universal-deep-strict-equal');
+
+deepEqual({a:1}, {a:'1'}); // => true
+deepEqual({a:1}, {a:'1'}, false); // => true
+deepEqual({a:1}, {a:'1'}, true); // => false
+```
+
+
 INSTALL
 ---------------------------------------
 
 ```
-$ npm install universal-deep-strict-equal
+npm install universal-deep-strict-equal
 ```
 
 
