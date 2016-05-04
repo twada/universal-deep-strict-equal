@@ -19,7 +19,7 @@ function makeBlock(f) {
 
 function supportsTypedArray() {
     try {
-        var ta = new Uint8Array([1]);
+        var ta = new Uint8ClampedArray(1e5);
         return !!ta;
     } catch (e) {
         return false;
