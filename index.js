@@ -26,6 +26,7 @@
 
 var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
+var filter = require('array-filter');
 var pSlice = Array.prototype.slice;
 var getPrototypeOf = Object.getPrototypeOf || function(obj) {
   return obj.__proto__ || (
@@ -94,7 +95,7 @@ var objectKeys = (function () {
         isEnumerable(obj, 'buffer') &&
         isEnumerable(obj, 'byteOffset') &&
         isEnumerable(obj, 'byteLength')) {
-      return keys(obj).filter(function (k) {
+      return filter(keys(obj), function (k) {
         return NODE_V10_ARRAY_BUFFER_ENUM.indexOf(k) === -1;
       });
     } else {

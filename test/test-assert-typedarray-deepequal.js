@@ -17,6 +17,17 @@ function makeBlock(f) {
   };
 }
 
+function supportsTypedArray() {
+    try {
+        var ta = new Uint8Array([1]);
+        return !!ta;
+    } catch (e) {
+        return false;
+    }
+}
+
+if (supportsTypedArray()) {
+
 var equalArrayPairs = [
   [new Uint8Array(1e5), new Uint8Array(1e5)],
   [new Uint16Array(1e5), new Uint16Array(1e5)],
@@ -47,18 +58,23 @@ var notEqualArrayPairs = [
   [new Float64Array([0.1]), new Float64Array([0.0])]
 ];
 
-describe('TypedArray deepEqual', function () {
-  equalArrayPairs.forEach(function (arrayPair, idx) {
-    it('equalArrayPairs - ' + idx, function () {
-      deepEqual(arrayPair[0], arrayPair[1]);
+  describe('TypedArray deepEqual', function () {
+    equalArrayPairs.forEach(function (arrayPair, idx) {
+      it('equalArrayPairs - ' + idx, function () {
+        deepEqual(arrayPair[0], arrayPair[1]);
+      });
+    });
+    notEqualArrayPairs.forEach(function (arrayPair, idx) {
+      it('notEqualArrayPairs - ' + idx, function () {
+        assert.throws(
+          makeBlock(deepEqual, arrayPair[0], arrayPair[1]),
+          assert.AssertionError
+        );
+      });
     });
   });
-  notEqualArrayPairs.forEach(function (arrayPair, idx) {
-    it('notEqualArrayPairs - ' + idx, function () {
-      assert.throws(
-        makeBlock(deepEqual, arrayPair[0], arrayPair[1]),
-        assert.AssertionError
-      );
-    });
+} else {
+  it('SKIP -- this platform does not support TypedArray', function () {
+    assert(true, 'skipped');
   });
-});
+}

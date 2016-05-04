@@ -9,6 +9,7 @@
   },
   "bugs": "https://github.com/twada/universal-deep-strict-equal/issues",
   "dependencies": {
+    "array-filter": "^1.0.0",
     "object-keys": "^1.0.9"
   },
   "devDependencies": {
