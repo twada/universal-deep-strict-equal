@@ -149,7 +149,7 @@ function _deepEqual(actual, expected, strict) {
   // Object.prototype.toString (aka pToString). Never perform binary
   // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
   // bit patterns are not identical.
-  } else if (ArrayBuffer && typeof ArrayBuffer.isView === 'function' &&
+  } else if (typeof ArrayBuffer === 'function' && typeof ArrayBuffer.isView === 'function' &&
              ArrayBuffer.isView(actual) && ArrayBuffer.isView(expected) &&
              pToString(actual) === pToString(expected) &&
              !(actual instanceof Float32Array ||
