@@ -3,6 +3,7 @@
 
 var _deepEqual = require('..');
 var assert = require('assert');
+var keys = Object.keys || require('object-keys');
 
 function deepEqual(actual, expected, message) {
     if (!_deepEqual(actual, expected, false)) {
@@ -73,7 +74,7 @@ a1.a = 'test';
 a1.b = true;
 a2.b = true;
 a2.a = 'test';
-assert.throws(makeBlock(deepEqual, Object.keys(a1), Object.keys(a2)),
+assert.throws(makeBlock(deepEqual, keys(a1), keys(a2)),
               assert.AssertionError);
 assert.doesNotThrow(makeBlock(deepEqual, a1, a2));
 });
