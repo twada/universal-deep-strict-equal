@@ -26,6 +26,7 @@
 
 var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
+var filter = require('array-filter');
 var pSlice = Array.prototype.slice;
 var getPrototypeOf = Object.getPrototypeOf || function(obj) {
   return obj.__proto__ || (
@@ -60,21 +61,6 @@ function isRegExp(re) {
 function isArguments(object) {
   return isObject(object) && pToString(object) == '[object Arguments]';
 }
-// check whether Buffer constructor accepts ArrayBuffer or not
-var isBufferConstructorAcceptsArrayBuffer = Uint8Array && (new Buffer(new Uint8Array([1]).buffer)[0] === 1);
-function toBuffer(ab) {
-  if (isBufferConstructorAcceptsArrayBuffer) {
-    // Node 4.x
-    return new Buffer(ab);
-  }
-  // Node 0.10.x and 0.12.x
-  var buffer = new Buffer(ab.byteLength);
-  var view = new Uint8Array(ab);
-  for (var i = 0; i < buffer.length; ++i) {
-    buffer[i] = view[i];
-  }
-  return buffer;
-}
 function fromBufferSupport() {
   try {
     return typeof Buffer.from === 'function' && !!Buffer.from([0x62,0x75,0x66,0x66,0x65,0x72]);
@@ -83,19 +69,43 @@ function fromBufferSupport() {
     return false;
   }
 }
+var toBuffer = (function () {
+  // check whether Buffer constructor accepts ArrayBuffer or not
+  function isBufferConstructorAcceptsArrayBuffer() {
+    try {
+      return typeof Uint8Array === 'function' && (new Buffer(new Uint8Array([1]).buffer)[0] === 1);
+    } catch (e) {
+      return false;
+    }
+  }
+  if (isBufferConstructorAcceptsArrayBuffer()) {
+    // Node 4.x
+    return function (ab) {
+      return new Buffer(ab);
+    };
+  } else {
+    // Node 0.10.x and 0.12.x
+    return function (ab) {
+      var buffer = new Buffer(ab.byteLength);
+      var view = new Uint8Array(ab);
+      for (var i = 0; i < buffer.length; ++i) {
+        buffer[i] = view[i];
+      }
+      return buffer;
+    };
+  }
+})();
 var bufferFrom = fromBufferSupport() ? Buffer.from : toBuffer;
 var objectKeys = (function () {
-  var NODE_V10_ARRAY_BUFFER_ENUM = ['BYTES_PER_ELEMENT','get','set','slice','subarray','buffer','length','byteOffset','byteLength'];
+  var OLD_V8_ARRAY_BUFFER_ENUM = ['BYTES_PER_ELEMENT','get','set','slice','subarray','buffer','length','byteOffset','byteLength'];
   var keys = Object.keys || require('object-keys');
   return function objectKeys(obj) {
-    // avoid iterating enumerable properties of ArrayBuffer under Node 0.10.x
-    if (isEnumerable(obj, 'BYTES_PER_ELEMENT') &&
-        isEnumerable(obj, 'subarray') &&
-        isEnumerable(obj, 'buffer') &&
+    // avoid iterating enumerable properties of ArrayBuffer under old V8
+    if (isEnumerable(obj, 'buffer') &&
         isEnumerable(obj, 'byteOffset') &&
         isEnumerable(obj, 'byteLength')) {
-      return keys(obj).filter(function (k) {
-        return NODE_V10_ARRAY_BUFFER_ENUM.indexOf(k) === -1;
+      return filter(keys(obj), function (k) {
+        return OLD_V8_ARRAY_BUFFER_ENUM.indexOf(k) === -1;
       });
     } else {
       return keys(obj);
@@ -137,7 +147,7 @@ function _deepEqual(actual, expected, strict) {
   // Object.prototype.toString (aka pToString). Never perform binary
   // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
   // bit patterns are not identical.
-  } else if (ArrayBuffer && typeof ArrayBuffer.isView === 'function' &&
+  } else if (typeof ArrayBuffer === 'function' && typeof ArrayBuffer.isView === 'function' &&
              ArrayBuffer.isView(actual) && ArrayBuffer.isView(expected) &&
              pToString(actual) === pToString(expected) &&
              !(actual instanceof Float32Array ||

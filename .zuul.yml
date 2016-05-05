@@ -1,15 +1,17 @@
 ui: mocha-bdd
 browsers:
   - name: internet explorer
-    version: latest
+    version: 6..latest
   - name: microsoftedge
     version: latest
-  - name: chrome
-    version: latest
   - name: safari
-    version: latest
+    version: 5..latest
+  - name: chrome
+    version: [26, 30, 35, 40, 45, -1..latest]
   - name: firefox
-    version: latest
+    version: [15, 20, 25, 30, 35, 40, -1..latest]
+  - name: opera
+    version: [15, 20, 25, 30, -1..latest]
   - name: iphone
     version: latest
   - name: android

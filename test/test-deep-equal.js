@@ -3,6 +3,7 @@
 
 var _deepEqual = require('..');
 var assert = require('assert');
+var keys = Object.keys || require('object-keys');
 
 function deepEqual(actual, expected, message) {
     if (!_deepEqual(actual, expected, false)) {
@@ -73,7 +74,7 @@ a1.a = 'test';
 a1.b = true;
 a2.b = true;
 a2.a = 'test';
-assert.throws(makeBlock(deepEqual, Object.keys(a1), Object.keys(a2)),
+assert.throws(makeBlock(deepEqual, keys(a1), keys(a2)),
               assert.AssertionError);
 assert.doesNotThrow(makeBlock(deepEqual, a1, a2));
 });
@@ -119,15 +120,33 @@ if (typeof Symbol !== 'undefined') {
 }
 });
 
-it('primitive wrappers and object', function () {
-assert.doesNotThrow(makeBlock(deepEqual, new String('a'), ['a']),
-                    assert.AssertionError);
-assert.doesNotThrow(makeBlock(deepEqual, new String('a'), {0: 'a'}),
-                    assert.AssertionError);
-assert.doesNotThrow(makeBlock(deepEqual, new Number(1), {}),
-                    assert.AssertionError);
-assert.doesNotThrow(makeBlock(deepEqual, new Boolean(true), {}),
-                    assert.AssertionError);
-});
+  describe('primitive wrappers and object', function () {
+    it('String and array', function () {
+      if (new String('a')['0'] === 'a') {
+        assert.doesNotThrow(makeBlock(deepEqual, new String('a'), ['a']),
+                assert.AssertionError);
+      } else {
+        assert.throws(makeBlock(deepEqual, new String('a'), ['a']),
+                assert.AssertionError);
+      }
+    });
+    it('String and object', function () {
+      if (new String('a')['0'] === 'a') {
+        assert.doesNotThrow(makeBlock(deepEqual, new String('a'), {0: 'a'}),
+                assert.AssertionError);
+      } else {
+        assert.throws(makeBlock(deepEqual, new String('a'), {0: 'a'}),
+                assert.AssertionError);
+      }
+    });
+    it('Number', function () {
+      assert.doesNotThrow(makeBlock(deepEqual, new Number(1), {}),
+                assert.AssertionError);
+    });
+    it('Boolean', function () {
+      assert.doesNotThrow(makeBlock(deepEqual, new Boolean(true), {}),
+                assert.AssertionError);
+    });
+  });
 
 });
