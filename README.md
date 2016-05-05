@@ -12,6 +12,12 @@ A port of [Node v6's internal _deepEqual function](https://github.com/nodejs/nod
 *Issues and improvements should be done in [Node.js](https://github.com/nodejs/node/issues) first.*
 
 
+API
+---------------------------------------
+
+`deepEqual(actual, expected, [strict])`
+
+
 USAGE
 ---------------------------------------
 
