@@ -4,17 +4,8 @@
 var _deepEqual = require('..');
 var assert = require('assert');
 
-function deepEqual(actual, expected, message) {
-    if (!_deepEqual(actual, expected, false)) {
-        assert.fail(actual, expected, message, 'deepEqual', deepEqual);
-    }
-};
-
-function makeBlock(f) {
-  var args = Array.prototype.slice.call(arguments, 1);
-  return function() {
-    return f.apply(this, args);
-  };
+function deepEqual (actual, expected) {
+    return _deepEqual(actual, expected, false);
 }
 
 function supportsTypedArray() {
@@ -62,15 +53,12 @@ var notEqualArrayPairs = [
   describe('TypedArray deepEqual', function () {
     equalArrayPairs.forEach(function (arrayPair, idx) {
       it('equalArrayPairs - ' + idx, function () {
-        deepEqual(arrayPair[0], arrayPair[1]);
+        assert(deepEqual(arrayPair[0], arrayPair[1]));
       });
     });
     notEqualArrayPairs.forEach(function (arrayPair, idx) {
       it('notEqualArrayPairs - ' + idx, function () {
-        assert.throws(
-          makeBlock(deepEqual, arrayPair[0], arrayPair[1]),
-          assert.AssertionError
-        );
+        assert(!deepEqual(arrayPair[0], arrayPair[1]));
       });
     });
   });
