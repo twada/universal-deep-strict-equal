@@ -1,4 +1,5 @@
-// port of https://github.com/nodejs/node/blob/v6.0.0/test/parallel/test-assert.js#L62-L163
+// port of https://github.com/nodejs/node/blob/v6.1.0/test/parallel/test-assert.js#L62-L163
+//     and https://github.com/nodejs/node/blob/v6.1.0/test/parallel/test-assert.js#L384-L410
 'use strict';
 
 var _deepEqual = require('..');

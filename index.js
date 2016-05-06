@@ -1,4 +1,4 @@
-// port of https://github.com/nodejs/node/blob/v6.0.0/lib/assert.js
+// port of https://github.com/nodejs/node/blob/v6.1.0/lib/assert.js#L146-L254
 
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
