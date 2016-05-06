@@ -26,6 +26,7 @@
 
 var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
+var indexOf = require('indexof');
 var filter = require('array-filter');
 var pSlice = Array.prototype.slice;
 var getPrototypeOf = Object.getPrototypeOf || function(obj) {
@@ -105,7 +106,7 @@ var objectKeys = (function () {
         isEnumerable(obj, 'byteOffset') &&
         isEnumerable(obj, 'byteLength')) {
       return filter(keys(obj), function (k) {
-        return OLD_V8_ARRAY_BUFFER_ENUM.indexOf(k) === -1;
+        return indexOf(OLD_V8_ARRAY_BUFFER_ENUM, k) === -1;
       });
     } else {
       return keys(obj);
@@ -163,9 +164,10 @@ function _deepEqual(actual, expected, strict, memos) {
   // accounts for both named and indexed properties on Arrays.
   } else {
     memos = memos || {actual: [], expected: []};
-    var actualIndex = memos.actual.indexOf(actual);
+
+    var actualIndex = indexOf(memos.actual, actual);
     if (actualIndex !== -1) {
-      if (actualIndex === memos.expected.indexOf(expected)) {
+      if (actualIndex === indexOf(memos.expected, expected)) {
         return true;
       }
     }
@@ -173,7 +175,7 @@ function _deepEqual(actual, expected, strict, memos) {
     memos.actual.push(actual);
     memos.expected.push(expected);
 
-    return objEquiv(actual, expected, strict, memos)
+    return objEquiv(actual, expected, strict, memos);
   }
 }
 
