@@ -1,3 +1,11 @@
+### [1.2.1](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.2.1) (2016-05-06)
+
+
+#### Bug Fixes
+
+  * [Dealing with old IE that doesn't have Arguments](https://github.com/twada/universal-deep-strict-equal/pull/7)
+
+
 ## [1.2.0](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.2.0) (2016-05-06)
 
 
