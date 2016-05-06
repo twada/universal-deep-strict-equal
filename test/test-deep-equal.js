@@ -119,6 +119,28 @@ if (typeof Symbol !== 'undefined') {
   assert.throws(makeBlock(deepEqual, Symbol(), {}), assert.AssertionError);
 }
 });
+// https://github.com/nodejs/node/issues/6416
+it("Make sure circular refs don't throw", function(){
+var b = {};
+b.b = b;
+
+var c = {};
+c.b = c;
+
+assert.doesNotThrow(makeBlock(deepEqual, b, c));
+assert.doesNotThrow(makeBlock(deepEqual, b, c));
+
+var d = {};
+d.a = 1;
+d.b = d;
+
+var e = {};
+e.a = 1;
+e.b = e.a;
+
+assert.throws(makeBlock(deepEqual, d, e), /AssertionError/);
+assert.throws(makeBlock(deepEqual, d, e), /AssertionError/);
+});
 
   describe('primitive wrappers and object', function () {
     it('String and array', function () {
