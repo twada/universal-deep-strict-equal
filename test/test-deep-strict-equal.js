@@ -159,3 +159,24 @@ assert.throws(makeBlock(deepStrictEqual, new Boolean(true), {}),
 });
 
 });
+
+// https://github.com/nodejs/node/issues/6416
+it("Make sure circular refs don't throw", function(){
+var b = {};
+b.b = b;
+
+var c = {};
+c.b = c;
+
+assert.doesNotThrow(makeBlock(deepStrictEqual, b, c));
+
+var d = {};
+d.a = 1;
+d.b = d;
+
+var e = {};
+e.a = 1;
+e.b = e.a;
+
+assert.throws(makeBlock(deepStrictEqual, d, e), /AssertionError/);
+});

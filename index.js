@@ -113,7 +113,7 @@ var objectKeys = (function () {
   };
 })();
 
-function _deepEqual(actual, expected, strict) {
+function _deepEqual(actual, expected, strict, memos) {
   // 7.1. All identical values are equivalent, as determined by ===.
   if (actual === expected) {
     return true;
@@ -162,11 +162,22 @@ function _deepEqual(actual, expected, strict) {
   // corresponding key, and an identical 'prototype' property. Note: this
   // accounts for both named and indexed properties on Arrays.
   } else {
-    return objEquiv(actual, expected, strict);
+    memos = memos || {actual: [], expected: []};
+    var actualIndex = memos.actual.indexOf(actual);
+    if (actualIndex !== -1) {
+      if (actualIndex === memos.expected.indexOf(expected)) {
+        return true;
+      }
+    }
+
+    memos.actual.push(actual);
+    memos.expected.push(expected);
+
+    return objEquiv(actual, expected, strict, memos)
   }
 }
 
-function objEquiv(a, b, strict) {
+function objEquiv(a, b, strict, actualVisitedObjects) {
   if (a === null || a === undefined || b === null || b === undefined)
     return false;
   // if one is a primitive, the other must be same
@@ -202,7 +213,8 @@ function objEquiv(a, b, strict) {
   //~~~possibly expensive deep test
   for (i = ka.length - 1; i >= 0; i--) {
     key = ka[i];
-    if (!_deepEqual(a[key], b[key], strict)) return false;
+    if (!_deepEqual(a[key], b[key], strict, actualVisitedObjects))
+      return false;
   }
   return true;
 }
