@@ -59,9 +59,18 @@ function isDate(d) {
 function isRegExp(re) {
   return isObject(re) && pToString(re) === '[object RegExp]';
 }
-function isArguments(object) {
-  return isObject(object) && pToString(object) == '[object Arguments]';
-}
+var isArguments = (function () {
+  function isArg(obj) {
+    return isObject(obj) && pToString(obj) == '[object Arguments]';
+  }
+  if (!isArg(arguments)) {
+    return function(obj) {
+      return isObject(obj) && !!obj.callee;
+    };
+  } else {
+    return isArg;
+  }
+})();
 function fromBufferSupport() {
   try {
     return typeof Buffer.from === 'function' && !!Buffer.from([0x62,0x75,0x66,0x66,0x65,0x72]);
