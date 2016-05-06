@@ -65,7 +65,11 @@ var isArguments = (function () {
   }
   if (!isArg(arguments)) {
     return function(obj) {
-      return isObject(obj) && !!obj.callee;
+      return isObject(obj) &&
+        typeof obj.length === 'number' &&
+        obj.length >= 0 &&
+        pToString(obj) !== '[object Array]' &&
+        pToString(obj.callee) === '[object Function]';
     };
   } else {
     return isArg;
