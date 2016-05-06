@@ -125,6 +125,12 @@ assert(!deepEqual(d, e));
 assert(!deepEqual(d, e));
 });
 
+it("GH-7178. Ensure reflexivity of deepEqual with `arguments` objects", function(){
+var args = (function() { return arguments; })();
+assert(!deepEqual([], args));
+assert(!deepEqual(args, []));
+});
+
   describe('primitive wrappers and object', function () {
     it('String and array', function () {
       if (new String('a')['0'] === 'a') {
