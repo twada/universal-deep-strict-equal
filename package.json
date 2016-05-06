@@ -1,7 +1,7 @@
 {
   "name": "universal-deep-strict-equal",
   "description": "A port of Node v6's internal _deepEqual function in a universal style",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Takuto Wada",
     "email": "takuto.wada@gmail.com",
