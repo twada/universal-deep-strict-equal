@@ -1,3 +1,11 @@
+## [1.2.0](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.2.0) (2016-05-06)
+
+
+#### Features
+
+  * [Allow circular references](https://github.com/twada/universal-deep-strict-equal/pull/4) by [@azu](https://github.com/azu)
+
+
 ## [1.1.0](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.1.0) (2016-05-06)
 
 
