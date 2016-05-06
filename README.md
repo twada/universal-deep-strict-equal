@@ -43,6 +43,11 @@ AUTHOR
 * [Takuto Wada](https://github.com/twada)
 
 
+CONTRIBUTORS
+---------------------------------------
+* [azu](https://github.com/azu)
+
+
 LICENSE
 ---------------------------------------
 Licensed under the [MIT](http://twada.mit-license.org/) license.

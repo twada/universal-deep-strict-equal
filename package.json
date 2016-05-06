@@ -8,6 +8,12 @@
     "url": "https://github.com/twada"
   },
   "bugs": "https://github.com/twada/universal-deep-strict-equal/issues",
+  "contributors": [
+    {
+      "name": "azu",
+      "url": "https://github.com/azu"
+    }
+  ],
   "dependencies": {
     "array-filter": "^1.0.0",
     "indexof": "0.0.1",
