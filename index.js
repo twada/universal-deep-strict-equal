@@ -63,6 +63,7 @@ var isArguments = (function () {
   function isArg(obj) {
     return isObject(obj) && pToString(obj) == '[object Arguments]';
   }
+  // dealing with old IEs (There's no Arguments type)
   if (!isArg(arguments)) {
     return function(obj) {
       return isObject(obj) &&
