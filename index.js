@@ -1,4 +1,4 @@
-// port of https://github.com/nodejs/node/blob/v6.1.0/lib/assert.js#L146-L254
+// port of https://github.com/nodejs/node/blob/v6.3.0/lib/assert.js#L145-L248
 
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //
@@ -28,7 +28,6 @@ var Buffer = require('buffer').Buffer;
 var compare = Buffer.compare;
 var indexOf = require('indexof');
 var filter = require('array-filter');
-var pSlice = Array.prototype.slice;
 var getPrototypeOf = Object.getPrototypeOf || function(obj) {
   return obj.__proto__ || (
     obj.constructor
@@ -205,11 +204,6 @@ function objEquiv(a, b, strict, actualVisitedObjects) {
       bIsArgs = isArguments(b);
   if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
     return false;
-  if (aIsArgs) {
-    a = pSlice.call(a);
-    b = pSlice.call(b);
-    return _deepEqual(a, b, strict);
-  }
   var ka = objectKeys(a),
       kb = objectKeys(b),
       key, i;

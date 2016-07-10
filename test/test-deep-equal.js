@@ -132,6 +132,20 @@ assert(!deepEqual([], args));
 assert(!deepEqual(args, []));
 });
 
+it("more checking that arguments objects are handled correctly refs nodejs/node#7413", function (){
+  var returnArguments = function() { return arguments; };
+
+  var someArgs = returnArguments('a');
+  var sameArgs = returnArguments('a');
+  var diffArgs = returnArguments('b');
+
+  assert(!deepEqual(someArgs, ['a']));
+  assert(!deepEqual(['a'], someArgs));
+  assert(!deepEqual(someArgs, {'0': 'a'}));
+  assert(!deepEqual(someArgs, diffArgs));
+  assert(deepEqual(someArgs, sameArgs));
+});
+
   describe('primitive wrappers and object', function () {
     it('String and array', function () {
       if (new String('a')['0'] === 'a') {

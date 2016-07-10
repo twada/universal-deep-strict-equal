@@ -1,7 +1,7 @@
 universal-deep-strict-equal
 ================================
 
-A port of [Node v6's internal _deepEqual function](https://github.com/nodejs/node/blob/v6.1.0/lib/assert.js#L146) in a universal style.
+A port of [Node v6's internal _deepEqual function](https://github.com/nodejs/node/blob/v6.3.0/lib/assert.js#L145) in a universal style.
 
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
