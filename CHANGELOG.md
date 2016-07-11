@@ -1,3 +1,9 @@
+### [1.2.2](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.2.2) (2016-07-11)
+
+
+  * [Sync with Node v6.3.0](https://github.com/twada/universal-deep-strict-equal/pull/9)
+
+
 ### [1.2.1](https://github.com/twada/universal-deep-strict-equal/releases/tag/v1.2.1) (2016-05-06)
 
 
