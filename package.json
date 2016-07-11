@@ -17,7 +17,7 @@
   "dependencies": {
     "array-filter": "^1.0.0",
     "indexof": "0.0.1",
-    "object-keys": "^1.0.9"
+    "object-keys": "^1.0.0"
   },
   "devDependencies": {
     "graceful-fs": "^4.1.3",
